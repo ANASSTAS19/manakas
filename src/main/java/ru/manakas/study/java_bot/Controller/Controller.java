@@ -1,10 +1,12 @@
 package ru.manakas.study.java_bot.Controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.manakas.study.java_bot.Model.ModelJokes;
 import ru.manakas.study.java_bot.Service.ServiceJokes;
+import ru.manakas.study.java_bot.Model.ModelJokes;
+import  ru.manakas.study.java_bot.Model.JokesCount;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,13 +25,15 @@ public class Controller {
     }
 
     @GetMapping
-    ResponseEntity<List<ModelJokes>> getAllJokes(){
-        return ResponseEntity.ok(jokeService.getAllJokes());
+    public ResponseEntity<Page<ModelJokes>> getAllJokes(@RequestParam int page){
+        return ResponseEntity.ok(jokeService.getAllJokes(page));
     }
 
     @GetMapping("/{id}")
-    ResponseEntity<ModelJokes> getJokeById(@PathVariable Long id){
-        return jokeService.getJokeById(id).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    ResponseEntity<ModelJokes> getJokeById(@PathVariable Long id, @RequestParam("userId") Long userId){
+        return jokeService.getJokeById(id, userId)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
@@ -43,5 +47,18 @@ public class Controller {
         jokeService.deleteJokeById(id);
         return ResponseEntity.ok().build();
     }
-}
 
+    //топ 5 популярных шуток
+    @GetMapping("/top5")
+    ResponseEntity<List<JokesCount>> getTop5Jokes() {
+        return ResponseEntity.ok(jokeService.getTop5Jokes());
+    }
+
+    //рандомная шутка
+    @GetMapping("/random")
+    public ResponseEntity<ModelJokes> getRandomJoke() {
+        return jokeService.getRandomJoke()
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+}

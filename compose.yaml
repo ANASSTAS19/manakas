@@ -1,0 +1,9 @@
+services:
+  postgres:
+    image: 'postgres:latest'
+    environment:
+      - 'POSTGRES_DB=anecdote-bot'
+      - 'POSTGRES_PASSWORD=manakas'
+      - 'POSTGRES_USER=postgres'
+    ports:
+      - '5432'
