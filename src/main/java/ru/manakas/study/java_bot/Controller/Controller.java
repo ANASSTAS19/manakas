@@ -48,13 +48,13 @@ public class Controller {
         return ResponseEntity.ok().build();
     }
 
-    //топ 5 популярных шуток
+    //шутки топ-5
     @GetMapping("/top5")
     ResponseEntity<List<JokesCount>> getTop5Jokes() {
         return ResponseEntity.ok(jokeService.getTop5Jokes());
     }
 
-    //рандомная шутка
+    //рандомная шутка ха ха
     @GetMapping("/random")
     public ResponseEntity<ModelJokes> getRandomJoke() {
         return jokeService.getRandomJoke()
